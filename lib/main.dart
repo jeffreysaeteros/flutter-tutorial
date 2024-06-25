@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'plan/plan.dart';
 import 'routes.dart';
 import 'home/home.dart';
@@ -23,10 +24,11 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return Container(
           decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/peach.jpg"),
-              fit: BoxFit.cover,
-            ),
+            color: Color.fromRGBO(252, 238, 214, 1),
+            // image: DecorationImage(
+            //   image: AssetImage("assets/peach.jpg"),
+            //   fit: BoxFit.cover,
+            // ),
           ),
           child: child,
         );
@@ -39,21 +41,31 @@ class MyApp extends StatelessWidget {
           body: Column(
             children: <Widget>[
               const SizedBox(height: 100),
-              const TabBar(
-                labelColor: Colors.black,
-                unselectedLabelColor: Colors.grey,
-                tabs: [
-                  Tab(text: "What's Coming"),
-                  Tab(text: "Home"),
-                  Tab(text: "Plan Something"),
-                  Tab(text: "Memories"),
-                ],
+              const Material(
+                color: Colors.white,
+                child: const TabBar(
+                  indicatorColor: Color(0xFFFFFF),
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Colors.grey,
+                  labelStyle: TextStyle(fontSize: 15),
+                  unselectedLabelStyle: TextStyle(fontSize: 14),
+                  isScrollable: true,
+                  tabAlignment: TabAlignment.center,
+                  dividerColor: Colors.transparent,
+                  splashFactory: NoSplash.splashFactory,
+                  tabs: [
+                    Tab(text: "Home"),
+                    Tab(text: "What's Coming"),
+                    Tab(text: "Plan Something"),
+                    Tab(text: "Memories"),
+                  ],
+                ),
               ),
               Expanded(
                 child: TabBarView(
                   children: [
+                    NavigatorWidget(routeName: '/'),
                     NavigatorWidget(routeName: '/coming'),
-                    NavigatorWidget(routeName: '/home'),
                     NavigatorWidget(routeName: '/plan'),
                     NavigatorWidget(routeName: '/memories'),
                   ],
@@ -80,7 +92,7 @@ class NavigatorWidget extends StatelessWidget {
       onGenerateRoute: (settings) {
         WidgetBuilder builder;
         switch (routeName) {
-          case '/home':
+          case '/':
             builder = (_) => HomePage();
             break;
           case '/memories':
