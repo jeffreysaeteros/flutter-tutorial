@@ -31,6 +31,7 @@ class _ComingPageState extends State<ComingPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(height: 40),
             ElevatedButton(
               onPressed: _selectedCalendarId != null
                   ? () => _retrieveEvents(_selectedDay)
