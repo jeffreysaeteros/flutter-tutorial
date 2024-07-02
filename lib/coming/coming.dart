@@ -21,37 +21,41 @@ class _ComingPageState extends State<ComingPage> {
   @override
   void initState() {
     super.initState();
-    _showCalendarPicker(); // Optionally call this method here to prompt at start
+    _CalendarPicker(); // Optionally call this method here to prompt at start
   }
 
   @override
   Widget build(BuildContext context) {
+    DateTime _focusedDay = DateTime.now();
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 40),
+            const SizedBox(height: 50),
+
+            // CALENDAR PICKER
             ElevatedButton(
-              onPressed: _selectedCalendarId != null
-                  ? () => _retrieveEvents(_selectedDay)
-                  : null,
-              child: const Text('Load Events'),
-            ),
-            ElevatedButton(
-              onPressed: _showCalendarPicker,
+              onPressed: _CalendarPicker,
               child: const Text('Select Calendar'),
             ),
+
             const SizedBox(height: 20),
+
             if (_errorMessage.isNotEmpty)
               Text(
                 _errorMessage,
                 style: const TextStyle(color: Colors.red),
               ),
+
+            // TABLE CALENDAR
             TableCalendar(
+              selectedDayPredicate: (day) {
+                return isSameDay(_selectedDay, day);
+              },
               firstDay: DateTime.utc(2010, 10, 16),
               lastDay: DateTime.utc(2030, 3, 14),
-              focusedDay: _selectedDay,
+              focusedDay: _focusedDay,
               calendarFormat: _calendarFormat,
               eventLoader: (day) => _groupedEvents[day] ?? [],
               onDaySelected: (selectedDay, focusedDay) {
@@ -87,7 +91,7 @@ class _ComingPageState extends State<ComingPage> {
     );
   }
 
-  Future<void> _showCalendarPicker() async {
+  Future<void> _CalendarPicker() async {
     var permissionsGranted = await _deviceCalendarPlugin.hasPermissions();
     if (!permissionsGranted.isSuccess || !permissionsGranted.data!) {
       permissionsGranted = await _deviceCalendarPlugin.requestPermissions();
